@@ -1,14 +1,14 @@
 # CCSupply
 
-CCSupply is a supply and ownership data analysis tool for [Curio Cards](curio.cards). Unlike the vast majority of NFT projects, Curio Cards was created before the ERC721 standard was defined. Combined with the fact that many Ethereum wallets from that era were lost, it's difficult to know how many Curio Cards are in active circulation. This tool uses the Curio Cards subgraph and the Etherscan API to show how many Curio Cards have been burned, how many are in inactive (possibly lost) wallets, and how many remain in active circulation.
+CCSupply is a supply and ownership data analysis tool for [Curio Cards](https://curio.cards). Unlike the vast majority of NFT projects, Curio Cards was created before the ERC721 standard was defined. Combined with the fact that many Ethereum wallets from that era were lost, it's difficult to know how many Curio Cards are in active circulation. This tool uses the Curio Cards subgraph and the Etherscan API to show how many Curio Cards have been burned, how many are in inactive (possibly lost) wallets, and how many remain in active circulation.
 
 ## Requirements
 
 - Python
-- [Pandas library for Python](pandas.pydata.org)
-- [Requests library for Python](pypi.org/project/requests)
-- [The Graph API key](thegraph.com/studio/apikeys/)
-- [Etherscan API key](etherscan.io/myapikey)
+- [Pandas library for Python](https://pandas.pydata.org)
+- [Requests library for Python](https://pypi.org/project/requests)
+- [The Graph API key](https://thegraph.com/studio/apikeys/)
+- [Etherscan API key](https://etherscan.io/myapikey)
 
 Note: While the Etherscan API is completely free, The Graph is only free for the first 1000 API requests, after which it costs a small amount of GRT. As of July 2022, running CCSupply requires 128 API requests from The Graph, or ~1/8 of the free allowance.
 
@@ -34,4 +34,4 @@ CCSupply is currently a work in progress. Next steps are:
 - Get user feedback on usability (Does the software work as intended cross-platform? Are there changes that we could make to reduce dependencies and/or make it easier to use?)
 - Online hosting (How can we provide a service that delivers outputs on a regular basis to the community? A Twitter or Discord bot, or a dedicated website? How often should new data be delivered?)
 
-If you'd like to contribute, feel free to make a pull request, or join the discussion in the [Curio Discord](discord.curio.cards)
+If you'd like to contribute, feel free to make a pull request, or join the discussion in the [Curio Discord](https://discord.curio.cards)
