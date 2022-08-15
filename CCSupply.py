@@ -132,7 +132,7 @@ def address_query(l_id_to_check, d_tx_types, d_cs, api_key):
 			data = json.loads(response.text)
 			filepath = os.path.join("address_tx", str(address) 
 					+ key + ".json")
-			f = open(filepath, 'w+')
+			f = open(filepath, 'w+', encoding='utf-8')
 			f.write(response.text)
 			f.close
 		i += 1
@@ -380,7 +380,7 @@ while i < len(l_id_to_check):
 	for key in d_tx_types.keys():
 		filepath = os.path.join("address_tx", str(l_id_to_check[i]) 
 				+ key + ".json")
-		f = open(filepath, "r")
+		f = open(filepath, "r", encoding='utf-8')
 		transactions = json.load(f)
 		df_trans = pd.DataFrame(transactions["result"])
 		transactions_count = len(df_trans.index)
@@ -447,8 +447,6 @@ l_timelock_unwrapped[29 - 1] = df_all.loc[(df_all['id'] == id_timelock) &
 l_zombie_supply = [sum(x) for x in zip(l_zombie_unwrapped, 
 				l_zombie_wrappedOfficial, l_zombie_wrappedUnofficial, 
 				l_timelock_unwrapped)]
-l_percent_zombie = [round(x / y, 4) for x, y in zip(l_zombie_supply, 
-				l_supply)]
 l_active = [x - y for x, y in zip(l_remain, l_zombie_supply)]
 
 #Add all token count lists to df_cs and df_cs_verb
@@ -470,8 +468,6 @@ df_cs_verb['wrappedUnofficial in Inactive Wallets'] = l_zombie_wrappedUnofficial
 df_cs_verb['Unwrapped in Timelocked Wallets'] = l_timelock_unwrapped
 df_cs['Inactive Wallet Supply'] = l_zombie_supply
 df_cs_verb['Inactive Wallet Supply'] = l_zombie_supply
-df_cs['Percent Inactive'] = l_percent_zombie
-df_cs_verb['Percent Inactive'] = l_percent_zombie
 df_cs['Active Supply'] = l_active
 df_cs_verb['Active Supply'] = l_active
 
