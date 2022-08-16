@@ -48,6 +48,24 @@ def get_api_key(filename):
 API key to this file" % (filename, filename))
 		sys.exit(1)
 
+def try_cardBalances_query(api_url, query):
+	i = 0
+	while i < 3:
+		try:
+			response = requests.post(api_url, json={'query': query})
+			data = json.loads(response.text)
+			return response
+		except JSONDecodeError:
+			print("Error encountered, trying again...")
+			i += 1
+			time.sleep(5)
+			pass
+		print("Gave up cardBalances query.")
+		f = open(filepath, 'w+')
+		f.write(response.text)
+		f.close()
+		exit()
+
 #Function to query Curio Cards subgraph for card balances for all 
 #	holders' addresses
 #Input is The Graph API key
@@ -91,13 +109,13 @@ def cardBalances_query(api_key):
 		  }
 		}
 		"""
-		response = requests.post(api_url, json={'query': query})
+		response = try_cardBalances_query(api_url, query)
+		data = json.loads(response.text)
 		filepath = os.path.join("cardBalances", "cardBalances_" + str(page) 
 				+ ".json")
 		f = open(filepath, 'w+')
 		f.write(response.text)
 		f.close()
-		data = json.loads(response.text)
 		length = len(data['data']['cardBalances'])
 		if page == 0: length_init = length
 		elapsed_time = time.time() - start_time
