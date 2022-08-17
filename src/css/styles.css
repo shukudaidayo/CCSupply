@@ -1,0 +1,179 @@
+html {
+  visibility: hidden; /* Set to visible by JS after chart is ready */
+  background-color: #FFE9E1;
+  margin: 0 auto;
+  max-width: 1200px;
+  font-family: 'Montserrat';
+  font-size: 18px;
+}
+
+body {
+  padding: 1rem;
+}
+
+h1 {
+  font-size: 2.75rem;
+  text-align: center;
+  font-weight: bold;
+  padding-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+h1 div {
+  display: inline;
+}
+
+h3 {
+  font-size: 1.75rem;
+  text-align: center;
+  margin-top: 1rem;
+  margin-bottom:  1rem;
+}
+
+header p {
+  font-size: 1.25rem;
+  text-align: center;
+  margin-top: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+h2 {
+  font-size: 1.75rem;
+  text-align: center;
+  font-weight: bold;
+  margin-top: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+#chart-div {
+  width: 95%;
+  height: 97%;
+  min-width: 760px;
+  background-color: white;
+  margin: auto;
+  border: 4px solid black;
+}
+
+#chart-container {
+  width: 100%;
+  min-height: 350px;
+  overflow-x: auto;
+  margin: 0 auto;
+  aspect-ratio: 16 / 9;
+}
+
+table {
+  margin: 0 auto 1.5rem auto;
+}
+
+th, td {
+  text-align: center;
+  vertical-align: middle;
+  padding: 0.15rem 0.5rem;
+  border: 1px solid black;;
+}
+
+th {
+  font-weight: bold;
+}
+
+.accordion {
+  background-color: inherit;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: bold;
+  text-align: left;
+  padding: 0.5rem 1rem;
+  width: 100%;
+  border: none;
+  transition: 0.4s;
+}
+
+.active {
+  background-color: #F9D6CA;
+}
+
+@media (hover: hover) {
+  .accordion:hover {
+    background-color: #F9D6CA;
+  }
+}
+
+.accordion:before {
+  content: '+ ';
+  font-family: monospace;
+}
+
+.active:before {
+  content: '- ';
+  font-family: monospace;
+}
+
+.panel {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.2s ease-out;
+  background-color: seashell;
+}
+
+p {
+  font-size: 1rem;
+  line-height: 1.3;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+}
+
+em {
+  font-style: italic;
+}
+
+strong {
+  font-weight: bold;
+}
+
+a:link, a:visited {
+  text-decoration: underline;
+}
+
+a:hover, a:active {
+  text-decoration: none;
+}
+
+hr {
+  border-top: 1px solid black;
+  border-style: inset;
+}
+
+footer p {
+  font-size: 0.75rem;
+  margin: 0;
+}
+
+@media screen and (max-width: 730px) and (min-width: 650px) {
+  th, td {
+    font-size: 0.85rem;
+  }
+}
+
+@media screen and (max-width: 650px) and (min-width: 540px) {
+  th, td {
+    font-size: 0.65rem;
+  }
+}
+
+@media screen and (max-width: 540px) {
+  .priority-3 {
+    display: none;
+  }
+  th, td {
+    font-size: 0.65rem;
+  }
+}
+
+@media screen and (max-width: 380px) {
+  h1 div {
+    display: block;
+  }
+}
