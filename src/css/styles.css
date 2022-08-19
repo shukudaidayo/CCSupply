@@ -1,6 +1,6 @@
 html {
   visibility: hidden; /* Set to visible by JS after chart is ready */
-  background-color: #FFE9E1;
+  background-color: #FFFAF7;
   margin: 0 auto;
   max-width: 1200px;
   font-family: 'Montserrat';
@@ -8,7 +8,31 @@ html {
 }
 
 body {
-  padding: 1rem;
+  margin: 1rem;
+  padding: 0 1rem 1rem 1rem;
+  background-color: #FFE9E1;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4), 0 6px 20px 0 rgba(0, 0, 0, 0.4);
+  border: 4px solid #F57040;
+  border-radius: 5rem;
+}
+
+@media screen and (min-width: 1250px) {
+  body {
+    padding: 0 2rem 1rem 2rem;
+  }
+}
+
+@media screen and (max-width: 850px) {
+  html {
+    background-color: #FFE9E1;
+  }
+
+  body {
+    margin: 0;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+  }
 }
 
 h1 {
@@ -17,6 +41,7 @@ h1 {
   font-weight: bold;
   padding-top: 1rem;
   margin-bottom: 1rem;
+  letter-spacing: -0.15rem;
 }
 
 h1 div {
@@ -77,25 +102,77 @@ th {
   font-weight: bold;
 }
 
+.tooltip {
+  position: relative;
+  display: inline-block;
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-decoration-thickness: 0.5px;
+}
+
+.tooltip .tooltip-text {
+  visibility: hidden;
+  width: 7rem;
+  bottom: 100%;
+  left: 50%;
+  margin-left: -3.5rem;
+  font-size: 0.75rem;
+  font-weight: normal;
+  background-color: #222222;
+  color: white;
+  text-align: center;
+  padding: 0.25rem;
+  border-radius: 0.33rem;
+  position: absolute;
+  z-index: 1;
+}
+
+.tooltip .tooltip-text::after {
+  content: " ";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -0.3rem;
+  border-width: 0.3rem;
+  border-style: solid;
+  border-color: #222222 transparent transparent transparent;
+}
+
+
+#last-tooltip-text {
+  margin-left: -5rem;
+}
+
+#last-tooltip-text::after {
+  margin-left: 1rem;
+}
+
+.tooltip:hover .tooltip-text {
+  visibility: visible;
+}
+
 .accordion {
   background-color: inherit;
   font-family: inherit;
   font-size: 1rem;
   font-weight: bold;
   text-align: left;
-  padding: 0.5rem 1rem;
+  padding: 0.5rem;
   width: 100%;
   border: none;
-  transition: 0.4s;
+  /*transition: 0.1s;*/
 }
 
 .active {
-  background-color: #F9D6CA;
+  /*background-color: #F9D6CA;*/
+  background-color: #F57040;
+  color: white;
 }
 
 @media (hover: hover) {
   .accordion:hover {
-    background-color: #F9D6CA;
+    background-color: #F57040;
+    color: white;
   }
 }
 
@@ -113,16 +190,27 @@ th {
   max-height: 0;
   overflow: hidden;
   transition: max-height 0.2s ease-out;
-  background-color: seashell;
+  background-color: #FFFAF7;
+  overflow-x: auto;
 }
 
 p {
   font-size: 1rem;
   line-height: 1.3;
+  margin: 0.5rem;
+}
+
+ul {
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
-  margin-left: 0.5rem;
-  margin-right: 0.5rem;
+  padding-left: 2rem;
+  list-style-type: disc;
+}
+
+li {
+  display: list-item;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
 }
 
 em {
@@ -141,14 +229,27 @@ a:hover, a:active {
   text-decoration: none;
 }
 
-hr {
-  border-top: 1px solid black;
-  border-style: inset;
+.avatar {
+  width: 15%;
+  margin: 0.5rem auto;
+  border-radius: 10%;
+  display: block;
 }
+
+.thanks {
+  text-align: center;
+}
+
+hr {
+  border-top: 1px solid;
+  border-color: black transparent transparent transparent;
+}
+
 
 footer p {
   font-size: 0.75rem;
   margin: 0;
+  text-align: center;
 }
 
 @media screen and (max-width: 730px) and (min-width: 650px) {

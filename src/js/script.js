@@ -84,7 +84,7 @@ $(document).ready(() => {
           });
           row += "</tr>";
           // Add row to table
-          $('tbody').append(row);
+          $('#supply-table').append(row);
         }
       };
     });
@@ -143,6 +143,7 @@ $(document).ready(() => {
       // Set chart options
       const options = {
                       isStacked: true,
+                      backgroundColor: '#FFFAF7',
                       colors: ['red', 'gold', 'green'],
                       hAxis: {
                         title: 'Card Number',
