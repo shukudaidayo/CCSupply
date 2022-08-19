@@ -1,7 +1,3 @@
-// This script populates the HTML table with data from Card_Supply.csv,
-// populates the "Last Updated" paragraph with the Last Modified timestamp 
-// of Card_Supply.csv, and creates a stacked column chart illustrating the
-// card supply data
 $(document).ready(() => {
 
   // Accordion mechanic
