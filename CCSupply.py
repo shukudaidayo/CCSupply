@@ -366,7 +366,7 @@ df_id_supply['wrappedOfficial'] = l_by_id_wrappedOfficial
 df_id_supply['wrappedUnofficial'] = l_by_id_wrappedUnofficial
 df_id_supply = df_id_supply.set_index('id')
 
-#Get list of ids to check if zombie (no outbound transactions in 1000 days)
+#Get list of ids to check if inactive (no outbound transactions in 1000 days)
 #Only include addresses with unwrapped tokens, as wrappers are <1000 days old
 #Exclude burn and timelock addresses, accounted for elsewhere
 l_id_to_check = df_id_supply.loc[(df_id_supply['unwrapped'] != 0)
@@ -392,16 +392,16 @@ else:
     os.makedirs("address_tx")
     address_query(l_id_to_check, d_tx_types, d_cs, escan_api_key)
 
-#Check for zombie addresses
+#Check for inactive addresses
 #Only supports one json per address (up to 10000 transactions)
 #If >=10k transactions, assumed active address
 #If no transactions on Etherscan, assumed inactive address
-l_isZombie = [True]*len(l_id_to_check)
+l_isInactive = [True]*len(l_id_to_check)
 currentTimestamp = int(time.time())
-ageZombie = 1000*24*60*60
+ageInactive = 1000*24*60*60
 i = 0
 while i < len(l_id_to_check):
-    isZombie = True
+    isInactive = True
     for key in d_tx_types.keys():
         filepath = os.path.join("address_tx", str(l_id_to_check[i])
                 + key + ".json")
@@ -415,48 +415,48 @@ while i < len(l_id_to_check):
         if transactions_count == 0:
             pass
         elif transactions_count >= 10000:
-            isZombie = False
+            isInactive = False
         else:
-            while (j < transactions_count) & isZombie:
+            while (j < transactions_count) & isInactive:
                 #Check if transaction is outbound
                 if df_trans["from"][j] == l_id_to_check[i]:
                     #Calculate age of transaction
                     blockTimestamp = int(df_trans["timeStamp"][j])
                     age = currentTimestamp - blockTimestamp
                     #Check if outbound transaction is younger than 1000 days
-                    if age < ageZombie: isZombie = False
+                    if age < ageInactive: isInactive = False
                 j += 1
         f.close
-    l_isZombie[i] = isZombie
+    l_isInactive[i] = isInactive
     i += 1
 
-#With zombie addresses identified, create list of zombie addresses
-l_id_zombie = []
+#With inactive addresses identified, create list of inactive addresses
+l_id_inactive = []
 i = 0
 while i < len(l_id_to_check):
-    if l_isZombie[i]:
-        l_id_zombie.append(l_id_to_check[i])
+    if l_isInactive[i]:
+        l_id_inactive.append(l_id_to_check[i])
     i += 1
 
-#Export zombie addresses
-f = open("Zombie_Addresses.txt", 'w+')
-for address in l_id_zombie:
+#Export inactive addresses
+f = open("Inactive_Addresses.txt", 'w+')
+for address in l_id_inactive:
     f.write(address + "\n")
 f.close()
 
-#Sum cards in zombie wallets by type
-l_zombie_unwrapped = [0]*31
-l_zombie_wrappedOfficial = [0]*31
-l_zombie_wrappedUnofficial = [0]*31
+#Sum cards in inactive wallets by type
+l_inactive_unwrapped = [0]*31
+l_inactive_wrappedOfficial = [0]*31
+l_inactive_wrappedUnofficial = [0]*31
 i = 0
 while i <= 30:
     symbol = "CRO" + str(df_cs.iat[i, 0])
-    l_zombie_unwrapped[i] = df_all.loc[(df_all['id'].isin(l_id_zombie))
+    l_inactive_unwrapped[i] = df_all.loc[(df_all['id'].isin(l_id_inactive))
                             & (df_all['symbol'] == symbol), 'unwrapped'].sum()
-    l_zombie_wrappedOfficial[i] = df_all.loc[(df_all['id'].isin(l_id_zombie))
+    l_inactive_wrappedOfficial[i] = df_all.loc[(df_all['id'].isin(l_id_inactive))
                                 & (df_all['symbol'] == symbol),
                                 'wrappedOfficial'].sum()
-    l_zombie_wrappedUnofficial[i] = df_all.loc[(df_all['id'].isin(l_id_zombie))
+    l_inactive_wrappedUnofficial[i] = df_all.loc[(df_all['id'].isin(l_id_inactive))
                                 & (df_all['symbol'] == symbol),
                                 'wrappedUnofficial'].sum()
     i += 1
@@ -469,10 +469,10 @@ l_timelock_unwrapped[29 - 1] = df_all.loc[(df_all['id'] == id_timelock) &
                             (df_all['symbol'] == "CRO29"), 'unwrapped'].item()
 
 #Calculate total inactive token counts, percent inactive, and total active
-l_zombie_supply = [sum(x) for x in zip(l_zombie_unwrapped, 
-                l_zombie_wrappedOfficial, l_zombie_wrappedUnofficial,
+l_inactive_supply = [sum(x) for x in zip(l_inactive_unwrapped, 
+                l_inactive_wrappedOfficial, l_inactive_wrappedUnofficial,
                 l_timelock_unwrapped)]
-l_active = [x - y for x, y in zip(l_remain, l_zombie_supply)]
+l_active = [x - y for x, y in zip(l_remain, l_inactive_supply)]
 
 #Add all token count lists to df_cs and df_cs_verb
 df_cs_verb = df_cs.copy()
@@ -487,12 +487,12 @@ df_cs['Total Burned Cards'] = l_inaccessible
 df_cs_verb['Total Burned Cards'] = l_inaccessible
 df_cs['Remaining Supply'] = l_remain
 df_cs_verb['Remaining Supply'] = l_remain
-df_cs_verb['Unwrapped in Inactive Wallets'] = l_zombie_unwrapped
-df_cs_verb['wrappedOfficial in Inactive Wallets'] = l_zombie_wrappedOfficial
-df_cs_verb['wrappedUnofficial in Inactive Wallets'] = l_zombie_wrappedUnofficial
+df_cs_verb['Unwrapped in Inactive Wallets'] = l_inactive_unwrapped
+df_cs_verb['wrappedOfficial in Inactive Wallets'] = l_inactive_wrappedOfficial
+df_cs_verb['wrappedUnofficial in Inactive Wallets'] = l_inactive_wrappedUnofficial
 df_cs_verb['Unwrapped in Timelocked Wallets'] = l_timelock_unwrapped
-df_cs['Inactive Wallet Supply'] = l_zombie_supply
-df_cs_verb['Inactive Wallet Supply'] = l_zombie_supply
+df_cs['Inactive Wallet Supply'] = l_inactive_supply
+df_cs_verb['Inactive Wallet Supply'] = l_inactive_supply
 df_cs['Active Supply'] = l_active
 df_cs_verb['Active Supply'] = l_active
 

@@ -6,7 +6,7 @@ address_tx/
 cardBalances/
 Etherscan_API_Key.txt
 The_Graph_API_Key.txt
-Zombie_Addresses.txt
+Inactive_Addresses.txt
 *.csv
 *.json
 
