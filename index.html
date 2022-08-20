@@ -19,7 +19,7 @@
     <header>
       <h1>Welcome To CCSupply<div>.xyz</div></h1>
       <h3><em>A Curio Card Supply Dashboard</em></h3>
-      <p><em id="lastModified">Updated Weekly – Chart/Table Last Updated: </em></p>
+      <p><em id="lastModified">Updated Weekly – Data Last Updated: </em></p>
     </header>
     <section id="chart">
       <h2>Curio Card Supply Chart</h2>
@@ -54,7 +54,7 @@
       <button class="accordion">Why is this site updated weekly, and not daily/houry/etc.?</button>
       <div class="panel">
         <p>To provide the most up-to-date information, this site uses the <a href="https://thegraph.com/explorer/subgraph?id=JBnWrv9pvBvSi2pUZzba3VweGBTde6s44QvsDABP47Gt&view=Overview" target="_blank">Curio Cards subgraph</a> to query card ownership data. Unfortunately, these API calls are not free, but cost a small amount of GRT to support the data indexers. Likewise, there are limitations on <a href="https://etherscan.io/apis" target="_blank">Etherscan API</a> calls and hosting bandwidth. Since these costs add up, and since the supply data doesn't change very much over time, data is updated weekly.</p>
-        <p>If you'd like to have access to more current data, all the resources needed to run CCSupply.py with your own API keys are available on <a href="https://github.com/shukudaidayo/CCSupply" target="_blank"></a>Github.</p>
+        <p>If you'd like to have access to more current data, all the resources needed to run CCSupply.py with your own API keys are available on <a href="https://github.com/shukudaidayo/CCSupply" target="_blank">Github</a>.</p>
       </div>
       <button class="accordion">What are burned cards?</button>
       <div class="panel">
@@ -64,7 +64,7 @@
           <li><a href="https://etherscan.io/address/0x000000000000000000000000000000000000dead" target="_blank">0x000000000000000000000000000000000000dEaD</a></li>
           <li><a href="https://opensea.io/collection/lockedcards" target="_blank">0x77F84c36e451496d7f489Efd16e9753fC2C8f0DF</a></li>
         </ul>
-        <p>The "0x00...0000" address is a common burn address for ETH and ERC-20 tokens. Since many NFT contracts disallow sending tokens to this address, the "0x00...dEaD" address is a common burn address for NFTs. The third address is the Locked Cards contract, an early Curio Card wrapper contract with <a href="https://etherscan.io/address/0x77f84c36e451496d7f489efd16e9753fc2c8f0df#comments" target="_blank">a flaw that prevents unwrapping</a>. For this reason, unwrapped tokens sent to this contract are considered burned.</p>
+        <p>The "0x00...0000" address is a common burn address for ETH and ERC-20 tokens. Since many NFT contracts disallow sending tokens to this address, the "0x00...dEaD" address is a common burn address for NFTs. The third address is the <a href="https://opensea.io/collection/lockedcards" target="_blank">Locked Cards</a> contract, an early Curio Card wrapper contract with <a href="https://etherscan.io/address/0x77f84c36e451496d7f489efd16e9753fc2c8f0df#comments" target="_blank">a flaw that prevents unwrapping</a>. For this reason, unwrapped tokens sent to this contract are considered burned.</p>
       </div>
       <button class="accordion">What are inactive cards?</button>
       <div class="panel">
@@ -78,7 +78,7 @@
       </div>
       <button class="accordion">Are timelocked Yellow's considered active or inactive?</button>
       <div class="panel">
-        <p>CRO29 cards <a href="https://opensea.io/assets/ethereum/0x60f80121c31a0d46b5279700f9df786054aa5ee5/649688" target="_blank">timelocked by Robek World</a> are considered to be inactive, as these are not in active circulation, and will be unlocked over the course of years.</p>
+        <p>CRO29 cards <a href="https://opensea.io/assets/ethereum/0x60f80121c31a0d46b5279700f9df786054aa5ee5/649688" target="_blank">timelocked by Robek World</a> are considered inactive, as these are not in active circulation, and will be unlocked over the course of years.</p>
       </div>
       <button class="accordion">What other supply data is available?</button>
       <div class="panel">
@@ -103,7 +103,7 @@
       <div class="panel">
         <p><a href="https://curio.cards/" target="_blank">Curio Cards</a> are the first art NFTs on the Ethereum blockchain. Wrapped Curio Cards are available now on <a href="https://opensea.io/collection/curiocardswrapper" target="_blank">OpenSea</a> and other NFT marketplaces near you.</p>
       </div>
-      <p class="thanks">Special thanks to <a href="https://twitter.com/Crypto_Lurker01" target="_blank">Crypto Lurker</a> for design consultation, as well as to the <a href="https://docs.curio.cards/dao-and-contribution/curio-dao" target="_blank">Curio DAO</a> and the <a href="https://discord.curio.cards/" target="_blank">Curio Cards community</a>. Without them, none of this would have been possible!</p>
+      <p class="thanks">Special thanks to <a href="https://twitter.com/Crypto_Lurker01" target="_blank">Crypto Lurker</a> for design consultation, as well as to the <a href="https://docs.curio.cards/dao-and-contribution/curio-dao" target="_blank">Curio DAO</a> and the <a href="https://discord.curio.cards/" target="_blank">Curio Cards community</a> for their support. Without them, none of this would have been possible!</p>
     </section>
   </main>
   <footer>
