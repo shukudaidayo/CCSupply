@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <link rel="stylesheet" type="text/css" href="src/css/reset.css">
+  <link rel="stylesheet" type="text/css" href="src/css/styles.css">
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script type="text/javascript" src="src/js/script.js"></script>
+  <title>CCSupply</title>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>Welcome To CCSupply<div>.xyz</div></h1>
+      <h3><em>A Curio Card Supply Dashboard</em></h3>
+      <p><em id="lastModified">Updated Weekly – Data Last Updated: </em></p>
+    </header>
+    <section id="chart">
+      <h2>Curio Card Supply Chart</h2>
+      <div id="chart-container">
+        <div id="chart-div"></div>
+      </div>
+    </section>
+    <section id="table">
+      <h2>Curio Card Supply Table</h2>
+      <table>
+        <thead>
+          <tr>
+            <th class="priority-1">Card #</th>
+            <th class="priority-2">Name</th>
+            <th class="priority-1"><div class="tooltip">Total Supply<span class="tooltip-text">The total number of cards sold from the original vending machine contracts</span></div></th>
+            <th class="priority-3"><div class="tooltip">Total Burned<br>Cards<span class="tooltip-text">The total number of cards sent to known burn addresses</span></div></th>
+            <th class="priority-3"><div class="tooltip">Remaining<br>Supply<span class="tooltip-text">The total number of unburned cards</span></div></th>
+            <th class="priority-3"><div class="tooltip">Inactive Wallet<br>Supply<span class="tooltip-text">The total number of cards in wallets with no outbound transactions in the last 1000 days</span></div></th>
+            <th class="priority-1"><div class="tooltip">Active Supply<span class="tooltip-text" id="last-tooltip-text">The total number of cards held in active wallets</span></div></th>
+          </tr>
+        </thead>
+        <tbody id='supply-table'>
+        </tbody>
+      </table>
+    </section>
+    <section id="faq">
+      <h2>FAQ</h2>
+      <button class="accordion">What is CCSupply.xyz?</button>
+      <div class="panel">
+        <p><a href="https://ccsupply.xyz/">CCSupply.xyz</a> is an online dashboard created to track the supply of Curio Cards. As an historical NFT collection, Curio Cards predate the <a href="https://eips.ethereum.org/EIPS/eip-721" target="_blank">ERC721 standard</a>, making it difficult to track the ownership of these tokens. Furthermore, many Ethereum wallets from that era have been lost. Together, this means that it's difficult to know how many Curio Cards are in active circulation. This website uses <a href="https://thegraph.com/explorer/subgraph?id=JBnWrv9pvBvSi2pUZzba3VweGBTde6s44QvsDABP47Gt&view=Overview" target="_blank">The Graph</a>, the <a href="https://etherscan.io/apis" target="_blank">Etherscan API</a>, and <a href="https://developers.google.com/chart" target="_blank">Google Charts</a> to show how many Curio Cards have been burned, how many are in inactive (possibly lost) wallets, and how many remain in active circulation.</p>
+      </div>
+      <button class="accordion">Why is this site updated weekly, and not daily/houry/etc.?</button>
+      <div class="panel">
+        <p>To provide the most up-to-date information, this site uses the <a href="https://thegraph.com/explorer/subgraph?id=JBnWrv9pvBvSi2pUZzba3VweGBTde6s44QvsDABP47Gt&view=Overview" target="_blank">Curio Cards subgraph</a> to query card ownership data. Unfortunately, these API calls are not free, but cost a small amount of GRT to support the data indexers. Likewise, there are limitations on <a href="https://etherscan.io/apis" target="_blank">Etherscan API</a> calls and hosting bandwidth. Since these costs add up, and since the supply data doesn't change very much over time, data is updated weekly.</p>
+        <p>If you'd like to have access to more current data, all the resources needed to run CCSupply.py with your own API keys are available on <a href="https://github.com/shukudaidayo/CCSupply" target="_blank">Github</a>.</p>
+      </div>
+      <button class="accordion">What are burned cards?</button>
+      <div class="panel">
+        <p>Burned cards are Curio Cards that have been sent to an address whose assets are known to be unrecoverable. CCSupply tracks three burn addresses:</p>
+        <ul>
+          <li><a href="https://etherscan.io/address/0x0000000000000000000000000000000000000000" target="_blank">0x0000000000000000000000000000000000000000</a></li>
+          <li><a href="https://etherscan.io/address/0x000000000000000000000000000000000000dead" target="_blank">0x000000000000000000000000000000000000dEaD</a></li>
+          <li><a href="https://opensea.io/collection/lockedcards" target="_blank">0x77F84c36e451496d7f489Efd16e9753fC2C8f0DF</a></li>
+        </ul>
+        <p>The "0x00...0000" address is a common burn address for ETH and ERC-20 tokens. Since many NFT contracts disallow sending tokens to this address, the "0x00...dEaD" address is a common burn address for NFTs. The third address is the <a href="https://opensea.io/collection/lockedcards" target="_blank">Locked Cards</a> contract, an early Curio Card wrapper contract with <a href="https://etherscan.io/address/0x77f84c36e451496d7f489efd16e9753fc2c8f0df#comments" target="_blank">a flaw that prevents unwrapping</a>. For this reason, unwrapped tokens sent to this contract are considered burned.</p>
+      </div>
+      <button class="accordion">What are inactive cards?</button>
+      <div class="panel">
+        <p>Inactive cards are Curio Cards that are held in a wallet that has not had an outgoing transaction in at least 1000 days. There are various reasons why a wallet might be inactive, including:</p>
+        <ul>
+          <li>Keys to the wallet have been lost, temporarily or permanently (not uncommon for 2017-era wallets)</li>
+          <li>The wallet is used as a vault, and the owner(s) have never needed to withdraw ETH or tokens</li>
+          <li>Cards were accidentally sent to the wrong address, and have been permanently lost</li>
+        </ul>
+        <p>This means that it is possible for inactive wallets to become active again! However, it is likely that many inactive cards have been permanently lost.</p>
+      </div>
+      <button class="accordion">Are timelocked Yellow's considered active or inactive?</button>
+      <div class="panel">
+        <p>CRO29 cards <a href="https://opensea.io/assets/ethereum/0x60f80121c31a0d46b5279700f9df786054aa5ee5/649688" target="_blank">timelocked by Robek World</a> are considered inactive, as these are not in active circulation, and will be unlocked over the course of years.</p>
+      </div>
+      <button class="accordion">What other supply data is available?</button>
+      <div class="panel">
+        <p>A zip file containing the following files can be downloaded <a href="https://ccsupply.xyz/data/All_Files.zip" download>here</a>:</p>
+        <ul>
+          <li><strong>Card_Supply.csv</strong>: Basic Curio Card supply info (same as table above)</li>
+          <li><strong>Card_Supply_Verbose.csv</strong>: Detailed Curio Card supply info</li>
+          <li><strong>Inactive_Addresses.txt</strong>: A list of all inactive card holder wallet addresses (no outbound transactions in the last 1000 days)</li>
+          <li><strong>All_Holders.csv</strong>: A table of all card holders and holdings, sorted by card</li>
+        </ul>
+      </div>
+      <button class="accordion">Where can I find the source code?</button>
+      <div class="panel">
+        <p>All files needed to replicate the chart and data on this site are available on the <a href="https://github.com/shukudaidayo/CCSupply" target="_blank">CCSupply Github</a>. If you'd like to make a suggestion or a contribution, feel free to raise an issue/pull request, or get in touch with shukudaidayo on <a href="https://twitter.com/shukudaidayo" target="_blank">Twitter</a>.</p>
+      </div>
+      <button class="accordion">Who created this site?</button>
+      <div class="panel">
+        <a href="https://opensea.io/assets/ethereum/0xf75140376d246d8b1e5b8a48e3f00772468b3c0c/6675" target="_blank"><img src="src/images/uwucrew_6675.png" alt="Uwucrew #6675" class="avatar"></a>
+        <p>CCSupply is a project by <a href="https://twitter.com/shukudaidayo" target="_blank">shukudaidayo</a>. Shuku is an <a href="https://opensea.io/shukudaidayo" target="_blank">NFT</a> <a href="https://opensea.io/0x07FF3f91fe3fe783CAEcBd2696386bC15b91c212" target="_blank">collector</a>, <a href="https://github.com/shukudaidayo" target="_blank">aspiring dev</a>, and friendly neighborhood <a href="https://opensea.io/collection/uwucrew" target="_blank">uwu</a>.</p>
+      </div>
+      <button class="accordion">What are Curio Cards?</button>
+      <div class="panel">
+        <p><a href="https://curio.cards/" target="_blank">Curio Cards</a> are the first art NFTs on the Ethereum blockchain. Wrapped Curio Cards are available now on <a href="https://opensea.io/collection/curiocardswrapper" target="_blank">OpenSea</a> and other NFT marketplaces near you.</p>
+      </div>
+      <p class="thanks">Special thanks to <a href="https://twitter.com/Crypto_Lurker01" target="_blank">Crypto Lurker</a> for design consultation, as well as to the <a href="https://docs.curio.cards/dao-and-contribution/curio-dao" target="_blank">Curio DAO</a> and the <a href="https://discord.curio.cards/" target="_blank">Curio Cards community</a> for their support. Without them, none of this would have been possible!</p>
+    </section>
+  </main>
+  <footer>
+    <hr>
+    <p>For inquiries, you can contact shukudaidayo on <a href="https://twitter.com/shukudaidayo" target="_blank">Twitter</a>.</p>
+    <p>Copyright © 2022 shukudaidayo</p>
+    <p>This page is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
+  </footer>
+</body>
+</html>
