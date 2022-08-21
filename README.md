@@ -46,6 +46,7 @@ The website in this repository is currently hosted at [ccsupply.xyz](https://ccs
 - Set up a weekly cron job that runs CCSupply.py, supplying the necessary terminal inputs, copies the output files to the hosted 'data' folder, and compresses them into All_Files.zip. For example, the cron job can run a bash script like:
 
 ```
+#!/bin/bash
 cd /path/to/unhosted/directory
 echo -e 'n/ny' | python3 CCSupply.py && cp Card_Supply.csv Card_Supply_Verbose.csv Zombie_Addresses.txt All_Holders.csv /path/to/hosted/directory/data
 cd /path/to/hosted/directory/data
