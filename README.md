@@ -19,7 +19,7 @@ Note: While the Etherscan API is completely free, The Graph is only free for the
 CCSupply.py generates the following outputs, saved to the same directory as CCSupply.py:
 - Card_Supply.csv: A summary of relevant stats for each Curio Card, including total supply, burned supply, inactive supply (# of cards in wallets with no OUT transactions in the last 1000 days), and the remaining active supply
 - Card_Supply_Verbose.csv: A longer summary similar to Card_Supply.csv, but adding breakdowns by card wrapper (unwrapped, official wrapper, unofficial wrapper)
-- Zombie_Addresses.txt: A list of all addresses that hold unwrapped Curio Cards but haven't executed an OUT transaction in over 1000 days (cards in these addresses are considered inactive)
+- Inactive_Addresses.txt: A list of all addresses that hold unwrapped Curio Cards but haven't executed an OUT transaction in over 1000 days (cards in these addresses are considered inactive)
 - All_Holders.csv: A table of all addresses holding Curio Cards, as well as holdings broken down by card type and wrapper
 
 ## How To Use
@@ -48,7 +48,7 @@ The website in this repository is currently hosted at [ccsupply.xyz](https://ccs
 ```
 #!/bin/bash
 cd /path/to/unhosted/directory
-echo -e 'n/ny' | python3 CCSupply.py && cp Card_Supply.csv Card_Supply_Verbose.csv Zombie_Addresses.txt All_Holders.csv /path/to/hosted/directory/data
+echo -e 'n/ny' | python3 CCSupply.py && cp Card_Supply.csv Card_Supply_Verbose.csv Inactive_Addresses.txt All_Holders.csv /path/to/hosted/directory/data
 cd /path/to/hosted/directory/data
 zip All_Filed.zip *
 ```
