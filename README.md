@@ -50,7 +50,7 @@ The website in this repository is currently hosted at [ccsupply.xyz](https://ccs
 cd /path/to/unhosted/directory
 echo -e 'n/ny' | python3 CCSupply.py && cp Card_Supply.csv Card_Supply_Verbose.csv Inactive_Addresses.txt All_Holders.csv /path/to/hosted/directory/data
 cd /path/to/hosted/directory/data
-zip All_Filed.zip *
+zip All_Files.zip *
 ```
 
 Note: Shared hosting services may not have Python 3 or the necessary Python libraries installed. In that case, a VPS may be required to run CCSupply.py on the server.
