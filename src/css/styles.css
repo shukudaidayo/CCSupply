@@ -18,7 +18,7 @@ body {
 
 @media screen and (min-width: 1250px) {
   body {
-    padding: 0 2rem 1rem 2rem;
+    padding: 0.5rem 2rem 1rem 2rem;
   }
 }
 
@@ -229,9 +229,14 @@ a:hover, a:active {
   text-decoration: none;
 }
 
-.avatar {
-  width: 15%;
+.avatar-link {
+  display: block;
+  width: 175px;
   margin: 0.5rem auto;
+}
+
+.avatar {
+  width: 100%;
   border-radius: 10%;
   display: block;
 }
