@@ -82,7 +82,7 @@ def try_cardBalances_query(api_url, query, filepath):
 def cardBalances_query(api_key):
     print("Querying Curio Cards subgraph...")
     api_url = "https://gateway.thegraph.com/api/" + api_key + \
-                "/subgraphs/id/JBnWrv9pvBvSi2pUZzba3VweGBTde6s44QvsDABP47Gt"
+                "/subgraphs/id/AoYpKh5PuiC5NgqZtY5vVRA2KT1Z8kVDr2NaYqsXzNuH"
     length = 0
     length_init = 0
     page = 0
@@ -139,7 +139,7 @@ def cardBalances_query(api_key):
 #Only gets first page of results per address (latest 10000 transactions)
 def address_query(l_id_to_check, d_tx_types, d_cs, api_key):
     print("Querying Etherscan API...")
-    api_url = "https://api.etherscan.io/api"
+    api_url = "https://api.etherscan.io/v2/api?chainid=1"
     i = 0
     list_len = len(l_id_to_check)
     for address in l_id_to_check:
@@ -160,6 +160,7 @@ def address_query(l_id_to_check, d_tx_types, d_cs, api_key):
             f = open(filepath, 'w+', encoding='utf-8')
             f.write(response.text)
             f.close
+            time.sleep(0.35)
         i += 1
     print("\nFinished Etherscan query")
 
@@ -170,7 +171,7 @@ def address_query(l_id_to_check, d_tx_types, d_cs, api_key):
 #    loop back to ask_yn if unsure
 def ask_yn(question):
     print(question)
-    answer = input().lower().strip()
+    answer = input()
     while True:
         if (answer == "yes") or (answer == "y"):
             question2 = "Warning: Existing data may be out of date. \
@@ -182,7 +183,7 @@ Query anyway? (Y/n)"
             return ask_yn_confirm(False, question, question2)
         else:
             print("Please answer yes or no")
-            answer = input().lower().strip()
+            answer = input()
 
 #Function to confirm whether or not to run API queries with user
 #Inputs are user response to ask_yn (bool), original question and 
@@ -191,7 +192,7 @@ Query anyway? (Y/n)"
 #    or loops back to ask_yn
 def ask_yn_confirm(prev_answer, old_question, new_question):
     print(new_question)
-    answer = input().lower().strip()
+    answer = input()
     while True:
         if (answer == "yes") or (answer == "y"):
             if prev_answer:
@@ -202,7 +203,7 @@ def ask_yn_confirm(prev_answer, old_question, new_question):
             return ask_yn(old_question)
         else:
             print("Please answer yes or no")
-            answer = input().lower().strip()
+            answer = input()
 
 #Function to ask user whether or not to run API queries (if existing
 #    data not found)
@@ -210,7 +211,7 @@ def ask_yn_confirm(prev_answer, old_question, new_question):
 #Exits program if user answers no
 def ask_yn_exit(question):
     print(question)
-    answer = input().lower().strip()
+    answer = input()
     while True:
         if (answer == "yes") or (answer == "y"):
             return
@@ -219,7 +220,7 @@ def ask_yn_exit(question):
             sys.exit(1)
         else:
             print("Please answer yes or no")
-            answer = input().lower().strip()
+            answer = input()
 
 #Function to delete folder with error handling
 def rm_folder(dir_path):
@@ -311,7 +312,6 @@ df_cs = pd.DataFrame(data=d_cs)
 id_0000_burn = "0x0000000000000000000000000000000000000000"
 id_dead_burn = "0x000000000000000000000000000000000000dead"
 id_lc_burn = "0x77f84c36e451496d7f489efd16e9753fc2c8f0df"
-id_timelock = "0x1b6a4a23df97a97feed5418b10db03ec63026aed"
 
 #Add up token counts for each token and add to count lists
 l_unwrapped = [0]*31
@@ -366,14 +366,13 @@ df_id_supply['wrappedOfficial'] = l_by_id_wrappedOfficial
 df_id_supply['wrappedUnofficial'] = l_by_id_wrappedUnofficial
 df_id_supply = df_id_supply.set_index('id')
 
-#Get list of ids to check if inactive (no outbound transactions in 1000 days)
-#Only include addresses with unwrapped tokens, as wrappers are <1000 days old
-#Exclude burn and timelock addresses, accounted for elsewhere
+#Get list of ids to check if inactive (no outbound transactions since 1/1/20)
+#Only include add's with unwrapped tokens, as wrappers deployed after 1/1/20
+#Exclude burn addresses, accounted for elsewhere
 l_id_to_check = df_id_supply.loc[(df_id_supply['unwrapped'] != 0)
                  & (df_id_supply.index != id_0000_burn)
                  & (df_id_supply.index != id_dead_burn)
-                 & (df_id_supply.index != id_lc_burn)
-                 & (df_id_supply.index != id_timelock)].index.tolist()
+                 & (df_id_supply.index != id_lc_burn)].index.tolist()
 d_tx_types = {
     "_tx": "txlist",
     "_tx_internal": "txlistinternal",
@@ -397,8 +396,8 @@ else:
 #If >=10k transactions, assumed active address
 #If no transactions on Etherscan, assumed inactive address
 l_isInactive = [True]*len(l_id_to_check)
-currentTimestamp = int(time.time())
-ageInactive = 1000*24*60*60
+startTimeTuple = (2020, 1, 1, 0, 0, 0, 0, 0, 0)
+startTimestamp = int(time.mktime(startTimeTuple))
 i = 0
 while i < len(l_id_to_check):
     isInactive = True
@@ -411,7 +410,6 @@ while i < len(l_id_to_check):
         transactions_count = len(df_trans.index)
         #Iterate through transactions
         j = 0
-        age = 0
         if transactions_count == 0:
             pass
         elif transactions_count >= 10000:
@@ -422,9 +420,8 @@ while i < len(l_id_to_check):
                 if df_trans["from"][j] == l_id_to_check[i]:
                     #Calculate age of transaction
                     blockTimestamp = int(df_trans["timeStamp"][j])
-                    age = currentTimestamp - blockTimestamp
-                    #Check if outbound transaction is younger than 1000 days
-                    if age < ageInactive: isInactive = False
+                    #Check if outbound transaction is after 1/1/20
+                    if blockTimestamp > startTimestamp: isInactive = False
                 j += 1
         f.close
     l_isInactive[i] = isInactive
@@ -461,17 +458,9 @@ while i <= 30:
                                 'wrappedUnofficial'].sum()
     i += 1
 
-#Get timelocked CRO29 cards
-#Although it is possible to access these cards, only a fraction of the supply
-#    is transferred out yearly by Robek World
-l_timelock_unwrapped = [0]*31
-l_timelock_unwrapped[29 - 1] = df_all.loc[(df_all['id'] == id_timelock) & 
-                            (df_all['symbol'] == "CRO29"), 'unwrapped'].item()
-
 #Calculate total inactive token counts, percent inactive, and total active
 l_inactive_supply = [sum(x) for x in zip(l_inactive_unwrapped, 
-                l_inactive_wrappedOfficial, l_inactive_wrappedUnofficial,
-                l_timelock_unwrapped)]
+                l_inactive_wrappedOfficial, l_inactive_wrappedUnofficial)]
 l_active = [x - y for x, y in zip(l_remain, l_inactive_supply)]
 
 #Add all token count lists to df_cs and df_cs_verb
@@ -490,7 +479,6 @@ df_cs_verb['Remaining Supply'] = l_remain
 df_cs_verb['Unwrapped in Inactive Wallets'] = l_inactive_unwrapped
 df_cs_verb['wrappedOfficial in Inactive Wallets'] = l_inactive_wrappedOfficial
 df_cs_verb['wrappedUnofficial in Inactive Wallets'] = l_inactive_wrappedUnofficial
-df_cs_verb['Unwrapped in Timelocked Wallets'] = l_timelock_unwrapped
 df_cs['Inactive Wallet Supply'] = l_inactive_supply
 df_cs_verb['Inactive Wallet Supply'] = l_inactive_supply
 df_cs['Active Supply'] = l_active
